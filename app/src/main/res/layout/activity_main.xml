@@ -212,6 +212,7 @@
                 android:id="@+id/btnSavePreset"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="2pt"
                 android:layout_weight="1"
                 android:onClick="buttonSavePreset"
                 android:text="SAVE PRESET" />
@@ -220,6 +221,7 @@
                 android:id="@+id/btnLoadPreset"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="2pt"
                 android:layout_weight="1"
                 android:onClick="buttonLoadPreset"
                 android:text="LOAD Preset" />

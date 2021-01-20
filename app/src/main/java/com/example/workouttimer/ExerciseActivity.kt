@@ -34,19 +34,25 @@ class ExerciseActivity : AppCompatActivity() {
     //////////////////////////////
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     public fun buttonPauseResume(view: View){
-        if (status.tag == "PAUSE") {
+        if (status.tag == "FINISHED") {
+            // do nothing if finished
+        } else if (status.tag == "PAUSE") {
             btnPauseResume.text = "PAUSE"
             status.tag = "RESUME"
             timer = startExerciseTimer(status.millis)
-        } else if(status.tag == "DONE"){
-            btnPauseResume.text = "PAUSE"
-            timer = startExerciseTimer(count_settings.total_sec() * countdownInterval)
         } else {
             status.tag = "PAUSE"
             btnPauseResume.text = "RESUME"
             timer.cancel()
         }
         updateUI()
+    }
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    public fun buttonRestart(view: View){
+        status = ExerciseStatus()
+        timer.cancel()
+        timer = startExerciseTimer(count_settings.total_sec() * countdownInterval)
+
     }
     public fun buttonBack(view: View){
         timer.cancel()
@@ -68,6 +74,7 @@ class ExerciseActivity : AppCompatActivity() {
                 if (elapse_sec < 0){
                     status.tag = "READY"
                     status.ready = elapse_sec * -1
+                    tone = "middle"
 
                     if (status.ready <= 3){
                         sound.speakText(status.ready.toString())
@@ -90,6 +97,7 @@ class ExerciseActivity : AppCompatActivity() {
                             }
                         }
                     } else {  // INTERVAL
+                        tone = "middle"
                         status.tag = "INTERVAL"
                         status.interval = count_settings.interval - (mod - count_settings.ticks * count_settings.reps )
                         if (status.interval == count_settings.interval) {
@@ -97,7 +105,7 @@ class ExerciseActivity : AppCompatActivity() {
                         } else if (status.interval % 10 == 0){
                             sound.speakText("${status.interval.toString()} seconds left")
                             tone = "high"
-                        } else if (status.interval <= 3 ) {
+                        } else if (status.interval <= 5 ) {
                             sound.speakText(status.interval.toString())
                         }
                     }
@@ -106,8 +114,8 @@ class ExerciseActivity : AppCompatActivity() {
                 updateUI()
             }
             override fun onFinish() {
-                status.tag = "DONE"
-                btnPauseResume.text = getString(R.string.RESTART)
+                status.tag = "FINISHED"
+                //btnPauseResume.text = getString(R.string.RESTART)
                 sound.speakText("all sets finished. well done.")
                 updateUI()
             }
@@ -122,7 +130,7 @@ class ExerciseActivity : AppCompatActivity() {
                 "READY" -> Color.YELLOW
                 "WORK" -> Color.GREEN
                 "INTERVAL" -> Color.YELLOW
-                "DONE" -> Color.CYAN
+                "FINISHED" -> Color.CYAN
                 "PAUSE" -> Color.YELLOW
                 else -> Color.WHITE
             }
@@ -134,7 +142,6 @@ class ExerciseActivity : AppCompatActivity() {
                     "READY" -> status.ready.toString()
                     "WORK" -> status.rep.toString()  // + " / " + count_settings.reps.toString()
                     "INTERVAL" -> status.interval.toString()
-                    // "DONE" -> "CONGRATS !!"
                     else -> ""
                 }
             //if (text != "") {
