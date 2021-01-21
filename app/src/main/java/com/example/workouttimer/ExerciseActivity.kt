@@ -49,7 +49,7 @@ class ExerciseActivity : AppCompatActivity() {
     }
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     public fun buttonRestart(view: View){
-        status = ExerciseStatus()
+        //status = ExerciseStatus()
         timer.cancel()
         timer = startExerciseTimer(count_settings.total_sec() * countdownInterval)
 
@@ -75,6 +75,8 @@ class ExerciseActivity : AppCompatActivity() {
                     status.tag = "READY"
                     status.ready = elapse_sec * -1
                     tone = "middle"
+                    status.set = 1
+                    status.rep = 1
 
                     if (status.ready <= 3){
                         sound.speakText(status.ready.toString())
@@ -104,10 +106,11 @@ class ExerciseActivity : AppCompatActivity() {
                             sound.speakText("interval of ${count_settings.interval} seconds")
                         } else if (status.interval % 10 == 0){
                             sound.speakText("${status.interval.toString()} seconds left")
-                            tone = "high"
+                            // tone = "high"
                         } else if (status.interval <= 5 ) {
                             sound.speakText(status.interval.toString())
                         }
+                        if (status.interval <= 3){ tone = "low" }
                     }
                 }
                 sound.beep(tone)

@@ -72,12 +72,7 @@ class MainActivity : AppCompatActivity(), TextWatcher {
         val intent: Intent = Intent(this, ExerciseActivity::class.java)
 
         val cs = getCountSettings()
-        intent.putExtra("interval", cs.interval)
-        intent.putExtra("ticks", cs.ticks)
-        intent.putExtra("ready", cs.ready)
-        intent.putExtra("reps", cs.reps)
-        intent.putExtra("sets", cs.sets)
-
+        cs.putToIntent(intent)
         startActivity(intent)
     }
     public fun buttonSavePreset(view: View){
@@ -152,5 +147,12 @@ data class CountSettings (
         reps =  intent.getIntExtra("reps", 10)
         sets = intent.getIntExtra("sets", 3)
         ready = intent.getIntExtra("ready", 10)
+    }
+    fun putToIntent(intent: Intent){
+        intent.putExtra("interval", interval)
+        intent.putExtra("ticks", ticks)
+        intent.putExtra("ready", ready)
+        intent.putExtra("reps", reps)
+        intent.putExtra("sets", sets)
     }
 }
